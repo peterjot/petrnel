@@ -1,6 +1,6 @@
 [ORG 0x7C00]
 
-mov bx, START_MSG
+mov bx, MSG_REAL_MODE
 call print
 call print_nl
 
@@ -28,17 +28,28 @@ call print_nl
 mov dx, [0x9000 + 512] ; first word from second sector
 call print_hex
 
-JMP $
+call switch_to_pm
+jmp $
 
 %include "print.asm"
 %include "print_hex.asm"
 %include "disk.asm"
+%include "gdt.asm"
+%include "32bit-switch.asm"
+%include "32bit-print.asm"
+
+[bits 32]
+BEGIN_PM:
+    mov ebx, MSG_PROT_MODE
+    call print_string_pm
+    jmp $
 
 ; data
 
-START_MSG: db "Starting bootlodaer", 0
 DISK_LOAD_MSG: db "Loading disk", 0 
 DISK_LOADED_MSG: db "Loaded disk", 0
+MSG_REAL_MODE db "Started in 16-bit real mode", 0
+MSG_PROT_MODE db "Loeaded 32-bit protected mode. POZDERKI :)", 0
 
 TIMES 510-($-$$) DB 0
 DW 0xAA55
