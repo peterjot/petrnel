@@ -18,7 +18,7 @@ os-image.bin: boot/bootsector.bin kernel.bin boot/empty.bin
 build: os-image.bin
 
 run: os-image.bin
-	$(QEMU) --curses -fda $<
+	$(QEMU) --curses -hda $<
 
 
 %.o: %.c ${HEADERS}
