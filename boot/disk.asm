@@ -9,6 +9,7 @@ disk_load:
     mov cl, 0x02 ; start from second sector -> skip boot sector
     mov ch, 0x00 ; cilinder num
     ;  'dl' - drive number, by default set by bios, or by caller
+    ; 0 = floppy, 1 = floppy2, 0x80 = hdd, 0x81 = hdd2
     mov dh, 0x00 ; head num
     ; read to [es:bx]
     int 0x13     ; bios interrupt
