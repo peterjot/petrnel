@@ -48,7 +48,7 @@ void clear_screen() {
         video_mem[i*2+1] = WHITE_ON_BLACK;
     }
 
-    set_cursor_offset(get_offset(0, 0));
+    set_cursor_offset(get_offset(2,2));
 }
 
 int print_char(char character, int col, int row, char attribute) {

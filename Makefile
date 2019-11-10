@@ -6,6 +6,9 @@ HEADERS = $(wildcard kernel/*.h drivers/*.h)
 OBJ = ${C_SOURCES:.c=.o}
 
 CC = /usr/local/i386elfgcc/bin/i386-elf-gcc
+GDB = /usr/local/i386elfgcc/bin/i386-elf-gdb
+
+CFLAGS = -g
 
 all: run
 
@@ -20,11 +23,17 @@ os-image.bin: boot/bootsector.bin kernel.bin boot/empty.bin
 build: os-image.bin
 
 run: os-image.bin
-	$(QEMU) --curses -fda $<
+	$(QEMU) --curses -hda $<
 
+kernel.elf: boot/kernel_entry.o ${OBJ}
+	i386-elf-ld -o $@ -Ttext 0x1000 $^
+
+debug: os-image.bin kernel.elf
+	$(QEMU) --courses -s -hda os-image.bin &
+	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 %.o: %.c ${HEADERS}
-	${CC} -ffreestanding -Wall -Wextra -Werror -c $< -o $@
+	${CC} ${CFLAGS} -ffreestanding -Wall -Wextra -Werror -c $< -o $@
 
 %.o: %.asm
 	nasm $< -f elf -o $@
