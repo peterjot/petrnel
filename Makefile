@@ -9,6 +9,8 @@ CC = /usr/local/i386elfgcc/bin/i386-elf-gcc
 
 all: run
 
+cleanrun: clean run
+
 kernel.bin: boot/kernel_entry.o ${OBJ}
 	i386-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
 
@@ -18,7 +20,7 @@ os-image.bin: boot/bootsector.bin kernel.bin boot/empty.bin
 build: os-image.bin
 
 run: os-image.bin
-	$(QEMU) --curses -hda $<
+	$(QEMU) --curses -fda $<
 
 
 %.o: %.c ${HEADERS}

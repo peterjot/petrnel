@@ -1,1 +1,1 @@
-times 1024 db 0x00
+times 4024 dw 0x0000
