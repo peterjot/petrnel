@@ -29,7 +29,7 @@ kernel.elf: boot/kernel_entry.o ${OBJ}
 	i386-elf-ld -o $@ -Ttext 0x1000 $^
 
 debug: os-image.bin kernel.elf
-	$(QEMU) --courses -s -hda os-image.bin &
+	$(QEMU) --curses -s -hda os-image.bin &
 	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 %.o: %.c ${HEADERS}
